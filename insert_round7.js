@@ -1,0 +1,71 @@
+const fs = require('fs');
+const path = 'C:/Users/shawn/Downloads/Green Bay Explorer.html';
+let html = fs.readFileSync(path, 'utf8');
+
+const entries = [
+// === GOLF ===
+{id:3945,name:"Wander Springs Golf (Senior $27, Ages 60+)",cat:"Activity",sub:"Golf",date:"",dateLabel:"Weekdays (senior rate weekdays only)",venue:"Wander Springs Golf Course",loc:"Greenleaf",addr:"4342 Wayside Rd, Greenleaf, WI 54126",desc:"Senior 60+ weekday rate: 18 holes $27, 9 holes $17. Cart $20/$11 extra. Great value! Regular weekday $35/$22, weekend $40/$25. Call 920-864-4653.",url:"https://wandersprings.com/",setting:"outdoor",walking:"someWalking",goodFor:["seniors"],highlight:true,free:false,recurring:true},
+{id:3946,name:"Brown County Golf (Senior 62+, Mon/Wed Special!)",cat:"Activity",sub:"Golf",date:"",dateLabel:"Daily (senior rates weekdays)",venue:"Brown County Golf Course",loc:"Oneida",addr:"897 Riverdale Dr, Oneida, WI 54155",desc:"Senior 62+ walking: weekday $37/18 holes, $25/9 holes. SPECIAL Mon & Wed: 18 holes riding $48! Twilight after 3pm: 18 riding $48. Call 920-497-1731.",url:"https://www.browncountygc.com/",setting:"outdoor",walking:"someWalking",goodFor:["seniors"],highlight:true,free:false,recurring:true},
+{id:3947,name:"Hilly Haven Golf (Senior $34/18 before 3pm!)",cat:"Activity",sub:"Golf",date:"",dateLabel:"Daily (senior Mon-Thu before 3pm)",venue:"Hilly Haven Golf Course",loc:"De Pere",addr:"5911 County Rd PP, De Pere, WI 54115",desc:"Senior 60+ Mon-Thu before 3pm: 18 holes $34, 9 holes $21! Early bird before 7am: $16/9 holes. Twilight after 6pm: $20/$15. Cart $23/$14. Call 920-336-6204.",url:"https://hillyhaven.com/",setting:"outdoor",walking:"someWalking",goodFor:["seniors"],highlight:true,free:false,recurring:true},
+{id:3948,name:"Crystal Springs Golf (Senior $28, Ages 55+!)",cat:"Activity",sub:"Golf",date:"",dateLabel:"Weekdays (senior rate, no weekend senior)",venue:"Crystal Springs Golf Course",loc:"Seymour",addr:"N8055 French Rd, Seymour, WI 54165",desc:"Senior 55+ weekday: $28 walk/$48 ride (18 holes). TWILIGHT after 5pm: unlimited play $20 walk/$38 ride! Monday 18 w/cart $45. Great value! ~20 min from GB.",url:"https://www.crystalspringsgolf.com/",setting:"outdoor",walking:"someWalking",goodFor:["seniors"],highlight:true,free:false,recurring:true},
+{id:3949,name:"Royal Scot Golf — $12 Monday Special!",cat:"Activity",sub:"Golf",date:"",dateLabel:"Daily (Mon $12 green + $12 cart!)",venue:"Royal Scot Golf Club",loc:"New Franken",addr:"4831 Church Rd, New Franken, WI 54229",desc:"Amazing $12 Monday green fee + $12 cart! Regular 18 walking $30, riding $47. Twilight available daily. Ask about senior rates (weekdays). Call 920-866-2356.",url:"https://www.royalscotgolfclub.com/",setting:"outdoor",walking:"someWalking",goodFor:["seniors"],highlight:true,free:false,recurring:true},
+// === KAYAK/WATER ===
+{id:3952,name:"Green Bay Sail & Paddle — Intro to Kayaking ($25)",cat:"Activity",sub:"Water Sports",date:"",dateLabel:"Seasonal (class calendar)",venue:"South Bay Marina",loc:"Bay Beach area",addr:"101 Bay Beach Rd, Green Bay, WI 54302",desc:"Learn to kayak for $25! Nonprofit on the Bay of Green Bay. Ages 8-99, adaptive programming available. Close to Bay Beach. Call 920-393-1983.",url:"https://www.gbsail.org/",setting:"outdoor",walking:"someWalking",goodFor:["seniors","family","couples"],highlight:true,free:false,recurring:true},
+{id:3953,name:"Foxy Paddler — Pontoon Cruise on the Fox River",cat:"Activity",sub:"Water Sports",date:"",dateLabel:"Seasonal (book online)",venue:"Leicht Memorial Park",loc:"Downtown Green Bay",addr:"128 Dousman St, Green Bay, WI 54303",desc:"Pontoon boat cruise on the Fox River! Mix & mingle seats from $45. Private 2hr cruise from $470 (up to 12). Restroom on board. BYO beverages. Bar stop optional!",url:"https://www.foxypaddler.com/",setting:"outdoor",walking:"lowWalking",goodFor:["seniors","couples"],highlight:true,free:false,recurring:true},
+// === SCENIC DRIVES ===
+{id:3955,name:"Bay Shore Park (Niagara Escarpment Views!)",cat:"Park",sub:"Scenic View",date:"",dateLabel:"Daily dawn-dusk",venue:"Cecil Depeau Bay Shore Park",loc:"New Franken",addr:"5637 Sturgeon Bay Rd, Green Bay, WI 54229",desc:"Stunning views from the Niagara Escarpment bluff overlooking the Bay of Green Bay! Picnic areas, harbor, wooded trails. FREE county park. Short walk to views.",url:"https://www.browncountywi.gov/",setting:"outdoor",walking:"someWalking",goodFor:["seniors","couples","family"],highlight:true,free:true,recurring:true},
+{id:3956,name:"High Cliff State Park (Lake Winnebago Views!)",cat:"Park",sub:"Day Trip",date:"",dateLabel:"Daily 6am-11pm (state park sticker req'd)",venue:"High Cliff State Park",loc:"Sherwood (Day Trip)",addr:"N7630 State Park Rd, Sherwood, WI 54169",desc:"Niagara Escarpment cliffs with panoramic Lake Winnebago views! WI seniors 65+ $3/day park sticker. Butterfly Pond Trail is mobility-friendly. ~40 min from GB.",url:"https://dnr.wisconsin.gov/",setting:"outdoor",walking:"someWalking",goodFor:["seniors","couples","family"],highlight:true,free:false,recurring:true},
+// === ONEIDA ===
+{id:3958,name:"Oneida Casino Bingo (Sessions Daily!)",cat:"Activity",sub:"Entertainment",date:"",dateLabel:"Daily sessions (AM, PM, Evening, Nite Owls Sat)",venue:"Irene Moore Activity Center",loc:"Oneida / Ashwaubenon",addr:"2020 Airport Dr, Green Bay, WI 54313",desc:"Daily bingo! Express AM from $13, Quest PM from $17, Evening from $20. Monthly Spectacular Bingo ($26-$29) and special Bash events ($55-$75, $50K+ prizes!). Players Club for birthday perks.",url:"https://oneidacasinohotel.com/bingo/",setting:"indoor",walking:"lowWalking",goodFor:["seniors"],highlight:true,free:false,recurring:true},
+// === BACK TO THEATER ===
+{id:3960,name:"Fathom Classics: The Birdcage (30th Anniversary!)",cat:"Event",sub:"Movie Theater",date:"2026-06-07",dateTo:"2026-06-10",dateLabel:"Sun Jun 7 & Wed Jun 10",venue:"Marcus Bay Park / GB East Cinema",loc:"Ashwaubenon / East Green Bay",addr:"755 Willard Dr, Ashwaubenon, WI 54304",desc:"Robin Williams & Nathan Lane comedy classic on the big screen! 30th anniversary with Leonard Maltin intro.",url:"https://www.fathomentertainment.com/",setting:"indoor",walking:"lowWalking",goodFor:["seniors","couples"],highlight:true,free:false,recurring:false},
+{id:3961,name:"Fathom Classics: Ocean's Eleven (25th Anniversary!)",cat:"Event",sub:"Movie Theater",date:"2026-06-21",dateTo:"2026-06-24",dateLabel:"Sun Jun 21 & Wed Jun 24",venue:"Marcus Bay Park / GB East Cinema",loc:"Ashwaubenon / East Green Bay",addr:"755 Willard Dr, Ashwaubenon, WI 54304",desc:"Clooney, Pitt, Damon and the gang! 25th anniversary of the heist classic. With Leonard Maltin intro.",url:"https://www.fathomentertainment.com/",setting:"indoor",walking:"lowWalking",goodFor:["seniors","couples"],highlight:true,free:false,recurring:false},
+// === BACK TO MORE ===
+{id:3963,name:"Capitol Civic Centre — Charlie & the Chocolate Factory",cat:"Event",sub:"Day Trip",date:"2026-05-07",dateTo:"2026-05-09",dateLabel:"Thu-Fri 7:30pm, Sat 3pm, May 7-9",venue:"Capitol Civic Centre",loc:"Manitowoc (Day Trip)",addr:"913 S 8th St, Manitowoc, WI 54220",desc:"Musical theater at the gorgeous Capitol Civic Centre! ~45 min from Green Bay. Full 2026 season includes Radium Girls, John Denver tribute, Latin Explosion, and more.",url:"https://cccshows.org/",setting:"indoor",walking:"lowWalking",goodFor:["seniors","family","couples"],highlight:true,free:false,recurring:false},
+// === REFOREST + NATURE ===
+{id:3965,name:"Baird Creek Greenway — East Side Nature Trail (FREE)",cat:"Park",sub:"Trail",date:"",dateLabel:"Daily dawn-dusk",venue:"Baird Creek Greenway",loc:"East Green Bay",addr:"324 Baird Creek Rd, Green Bay, WI 54301",desc:"Paved multi-use trails along Baird Creek with limestone ledges and small waterfalls! FREE. East-side gem for a morning walk. Creek flow varies with rain.",url:"https://www.greenbaywi.gov/",setting:"outdoor",walking:"someWalking",goodFor:["seniors","family","couples"],highlight:true,free:true,recurring:true},
+// === HABITAT RESTORE ===
+{id:3967,name:"Habitat for Humanity ReStore (50-75% Off!)",cat:"Shop",sub:"Thrift Store",date:"",dateLabel:"Tue-Fri 10-6, Sat 9-5 (closed Sun-Mon)",venue:"Habitat ReStore",loc:"Allouez",addr:"1967 Allouez Ave, Green Bay, WI 54311",desc:"Building materials, cabinets, appliances, furniture, tools, decor at 50-75% off retail! Inventory changes daily. Supports Habitat for Humanity housing mission.",url:"https://www.greenbayhabitat.org/",setting:"indoor",walking:"someWalking",goodFor:["seniors"],highlight:false,free:false,recurring:true},
+// === ST VINCENT DIG & SAVE ===
+{id:3968,name:"St. Vincent de Paul Dig & Save (Pay by the Pound!)",cat:"Shop",sub:"Thrift Store",date:"",dateLabel:"Mon-Sat 10-6, Sun 11-6",venue:"SVDP Dig & Save Outlet",loc:"East Green Bay",addr:"2121 Van Deuren St, Green Bay, WI 54302",desc:"Unique pay-by-the-pound thrift shopping! Bins of textiles, linens, hard goods, glass, books. An adventure! Plus 3 regular SVDP stores in the metro area.",url:"https://svdpgb.org/",setting:"indoor",walking:"someWalking",goodFor:["seniors"],highlight:false,free:false,recurring:true},
+// === ESCAPE ROOM ===
+{id:3970,name:"Escape Room Wisconsin — Green Bay (7 Adventures!)",cat:"Activity",sub:"Entertainment",date:"",dateLabel:"Wed-Sun (Wed-Thu 11-8:30, Fri-Sat 11-10, Sun 11-6:30)",venue:"Escape Room Wisconsin",loc:"East Green Bay",addr:"985 Centennial St, Green Bay, WI 54303",desc:"Seven high-production escape room adventures! ~$30-35/person, private rooms, 60 minutes. Mental puzzles (not physical). Great for couples and small groups!",url:"https://www.escaperoomwi.com/",setting:"indoor",walking:"lowWalking",goodFor:["couples","family"],highlight:true,free:false,recurring:true},
+// === PUBLIC ART ===
+{id:3972,name:"Packers Heritage Trail — Self-Guided History Tour",cat:"Attraction",sub:"Walking Tour",date:"",dateLabel:"Free, anytime (best with smartphone)",venue:"Downtown Green Bay → De Pere",loc:"Downtown Green Bay",addr:"Start: 210 Museum Pl, Green Bay, WI 54303",desc:"25 bronze plaques tracing Packers history from founding to Lombardi! FREE self-guided. Start at Neville Museum. Plaza with statues at Washington & Cherry. Can drive between clusters for minimal walking.",url:"https://www.packershofandtours.com/explore/heritage-trail",setting:"outdoor",walking:"someWalking",goodFor:["seniors","family","couples"],highlight:true,free:true,recurring:true},
+{id:3973,name:"Downtown Green Bay Mural Tour (50+ Murals!)",cat:"Attraction",sub:"Walking Tour",date:"",dateLabel:"Free, anytime (daylight best for photos)",venue:"Broadway & Downtown Districts",loc:"Downtown Green Bay",addr:"N Broadway, Green Bay, WI 54303",desc:"Over 50 murals in the Broadway and Downtown districts! Bart Starr, Ho-Chunk Heritage, MI BARRIO, Ray Nitschke Bridge, community bloom mosaic. FREE self-guided art walk. Combine with La Baye Loop!",url:"https://downtowngreenbay.com/visit/publicart",setting:"outdoor",walking:"someWalking",goodFor:["seniors","couples","family"],highlight:true,free:true,recurring:true},
+// === FOX RIVER TRAIL ===
+{id:3975,name:"Fox River State Trail — Paved Scenic Trail (FREE!)",cat:"Park",sub:"Trail",date:"",dateLabel:"Daily (walking free, biking pass $5/day)",venue:"Fox River State Recreational Trail",loc:"Green Bay → De Pere",addr:"Multiple access points along Fox River",desc:"~10 miles of paved riverside trail! Multiple art sculptures along the route (Life of the River series). Benches, restroom access at major parks. Walking FREE; bike pass $5/day, $25/year.",url:"https://www.greenbay.com/",setting:"outdoor",walking:"someWalking",goodFor:["seniors","couples","family"],highlight:true,free:true,recurring:true},
+// === ZURKO FLEA ===
+{id:3977,name:"Zurko Indoor Flea Market at Resch Expo",cat:"Event",sub:"Shopping",date:"2026-04-04",dateLabel:"Sat Apr 4, 8am-5pm (also Nov 28)",venue:"Resch Expo",loc:"Ashwaubenon",addr:"840 Armed Forces Dr, Ashwaubenon, WI 54304",desc:"Huge indoor flea and collectibles market! Antiques, vintage, toys, memorabilia. $8 admission, kids 12 & under free. Next date: November 28.",url:"https://zurkopromotions.com/",setting:"indoor",walking:"someWalking",goodFor:["seniors","couples"],highlight:true,free:false,recurring:false},
+// === SENIOR TRANSIT ===
+{id:3979,name:"Green Bay Metro Transit (Senior Fare $1!)",cat:"Service",sub:"Senior Service",date:"",dateLabel:"Fixed routes + On Demand (check schedule)",venue:"Green Bay Metro",loc:"Green Bay Metro Area",addr:"Green Bay, WI",desc:"Seniors 65+ and Medicare holders ride for just $1 cash! Day pass $2, monthly $31. On Demand service for flexible routing. Perfect for getting around without a car.",url:"https://www.greenbaywi.gov/",setting:"outdoor",walking:"lowWalking",goodFor:["seniors"],highlight:true,free:false,recurring:true},
+];
+
+let newStr = '';
+for (const e of entries) {
+  const descEsc = e.desc.replace(/"/g, '\\"');
+  const nameEsc = e.name.replace(/"/g, '\\"');
+  let s = ',\n{id:' + e.id + ',name:"' + nameEsc + '",cat:"' + e.cat + '",sub:"' + e.sub + '"';
+  s += ',price:"' + (e.free ? 'free' : '$$') + '",priceNum:' + (e.free ? 0 : 2);
+  s += ',date:"' + (e.date||'') + '"';
+  if (e.dateTo) s += ',dateTo:"' + e.dateTo + '"';
+  s += ',dateLabel:"' + (e.dateLabel || '') + '"';
+  s += ',venue:"' + e.venue + '"';
+  s += ',desc:"' + descEsc + '"';
+  s += ',url:"' + (e.url || '') + '"';
+  s += ',setting:"' + e.setting + '",walking:"' + e.walking + '"';
+  s += ',goodFor:' + JSON.stringify(e.goodFor);
+  s += ',highlight:' + e.highlight;
+  s += ',cuisine:"' + (e.cuisine || '') + '",established:""';
+  s += ',free:' + e.free + ',recurring:' + (e.recurring || false) + '}';
+  newStr += s;
+}
+
+const lastEntry = 'free:false,recurring:true}';
+const idx = html.lastIndexOf(lastEntry);
+if (idx === -1) { console.log('ERROR: insertion point not found'); process.exit(1); }
+html = html.substring(0, idx + lastEntry.length) + newStr + html.substring(idx + lastEntry.length);
+
+fs.writeFileSync(path, html, 'utf8');
+console.log('Added ' + entries.length + ' entries (IDs ' + Math.min(...entries.map(e=>e.id)) + '-' + Math.max(...entries.map(e=>e.id)) + ')');
+console.log('File size: ' + Buffer.byteLength(html, 'utf8'));

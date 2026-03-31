@@ -1,0 +1,21 @@
+feat: add TV guide, scenic drives, weather, smart search, and popup overlays
+
+- Add YouTube TV Guide mode powered by GraceNote API with 100+ channels,
+  "What's On" today view (On Now / Up Next / Tonight), genre and network
+  filters, and intelligent search across shows, genres, and channels
+- Add 35 curated scenic drives near Green Bay with rich tourist descriptions,
+  hole-in-the-wall stop recommendations, embedded Google Maps previews,
+  distance filters, and a favorites system persisted in localStorage
+- Add weather forecast on calendar dates (high/low temp + icon) using the
+  free Open-Meteo API with 16-day forecast and no API key required
+- Upgrade "What's going on this week?" to a full-screen popup overlay with
+  day-by-day tabs, morning/afternoon/evening sections, and inline saving
+- Upgrade "Plan Something" to a full-screen popup overlay with date pickers,
+  time-of-day and category filters, conflict detection, and weather per day
+- Add intelligent search for local mode (AND logic across all fields) and
+  TV mode (searches show names, genres, networks, descriptions, tags)
+- Add hide/remove button on all results (local events, TV shows, today view)
+  with localStorage persistence and "restore all" option
+- Add "Let's Go for a Drive" button with car emoji in the local left panel
+- Clean up repo: remove old helper/insert scripts and legacy HTML file
+- Add run.ps1 launcher script for browser refresh workflow

@@ -9,27 +9,30 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:focus-visible{outline:2px solid #4a7c59;outline-offset:2px;border-radius:3px}
 :root{
-  --text:#1a1a1a;--text-light:#555;--text-muted:#aaa;
+  --text:#1a1a1a;--text-light:#444;--text-muted:#888;
   --bg:#f7f7f5;--card:#fff;--border:#ddd;--border-light:#efefef;
   --hover:#f3f3f0;--active:#e8e8e5;--radius:8px;
   --shadow:0 1px 3px rgba(0,0,0,.06);
   --tv-accent:#1a5276;--tv-bg:#f5f7fa;--tv-pill:#e8edf2;--tv-pill-hover:#dce3ea;
 }
-html{font-size:18px}
+html{font-size:19px}
 body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);background:var(--bg);line-height:1.5;overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased}
 
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:.5rem 1.5rem;background:var(--card);border-bottom:1px solid var(--border);height:48px;flex-shrink:0}
 .topbar-left{display:flex;align-items:center;gap:1rem}
+.home-btn{background:none;border:1px solid var(--border-light);border-radius:6px;font-size:1.3rem;line-height:1;padding:4px 8px;cursor:pointer;color:var(--text);transition:background .15s}
+.home-btn:hover{background:var(--bg)}
 .greeting{font-size:1.1rem;font-weight:600;letter-spacing:-.01em}
 .mode-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;flex-shrink:0}
-.mode-btn{font-family:inherit;font-size:.68rem;font-weight:600;padding:4px 14px;border:none;cursor:pointer;transition:all .12s;white-space:nowrap}
+.mode-btn{font-family:inherit;font-size:.74rem;font-weight:600;padding:5px 16px;border:none;cursor:pointer;transition:all .12s;white-space:nowrap}
 .mode-btn.active-local{background:var(--text);color:#fff}
 .mode-btn.active-tv{background:var(--tv-accent);color:#fff}
 .mode-btn:not(.active-local):not(.active-tv){background:var(--card);color:var(--text-light)}
 .mode-btn:not(.active-local):not(.active-tv):hover{background:var(--hover)}
-.search-box{font-family:inherit;font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius);outline:none;width:220px;transition:border-color .15s}
+.search-box{font-family:inherit;font-size:.88rem;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius);outline:none;width:240px;transition:border-color .15s}
 .search-box:focus{border-color:#999}
 
 /* TICKER */
@@ -44,7 +47,7 @@ body.tv-mode .ticker-wrap{background:#f0f3f7;border-color:#d5dce6}
 
 /* FILTERS BAR */
 .filters-bar{display:flex;align-items:center;gap:5px;padding:6px 1.5rem;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch}
-.cat-btn{font-family:inherit;font-size:.72rem;padding:3px 12px;border:1px solid var(--border);border-radius:16px;background:var(--card);color:var(--text-light);cursor:pointer;white-space:nowrap;transition:all .15s;line-height:1.4}
+.cat-btn{font-family:inherit;font-size:.76rem;padding:5px 14px;border:1px solid var(--border);border-radius:16px;background:var(--card);color:var(--text-light);cursor:pointer;white-space:nowrap;transition:all .15s;line-height:1.4}
 .cat-btn:hover{background:var(--hover)}
 .cat-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
 body.tv-mode .cat-btn.active{background:var(--tv-accent);border-color:var(--tv-accent)}
@@ -57,7 +60,7 @@ body.tv-mode .right-panel{background:var(--tv-bg)}
 
 /* LEFT PANEL CONTROLS */
 .left-controls{padding:.7rem 1rem;border-bottom:1px solid var(--border-light);flex-shrink:0}
-.action-btn{font-family:inherit;font-size:.82rem;font-weight:600;padding:8px 12px;border:1px solid var(--text);border-radius:var(--radius);background:var(--text);color:#fff;cursor:pointer;width:100%;text-align:center;transition:all .15s;margin-bottom:5px}
+.action-btn{font-family:inherit;font-size:.88rem;font-weight:600;padding:10px 14px;border:1px solid var(--text);border-radius:var(--radius);background:var(--text);color:#fff;cursor:pointer;width:100%;text-align:center;transition:all .15s;margin-bottom:6px}
 .action-btn:hover{opacity:.85}
 .action-btn.active{background:var(--card);color:var(--text);border-style:dashed}
 .action-btn.secondary{background:var(--card);color:var(--text);border-color:var(--border);font-weight:500}
@@ -68,7 +71,7 @@ body.tv-mode .action-btn.active{background:var(--card);color:var(--tv-accent);bo
 body.tv-mode .action-btn.secondary.active{background:var(--tv-accent);color:#fff;border-color:var(--tv-accent)}
 .ctrl-row{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap}
 .ctrl-label{font-size:.72rem;font-weight:600;color:var(--text-light);white-space:nowrap}
-.dist-btn{font-family:inherit;font-size:.68rem;padding:3px 10px;border:1px solid var(--border);border-radius:14px;background:var(--card);color:var(--text-light);cursor:pointer;transition:all .15s}
+.dist-btn{font-family:inherit;font-size:.74rem;padding:4px 12px;border:1px solid var(--border);border-radius:14px;background:var(--card);color:var(--text-light);cursor:pointer;transition:all .15s}
 .dist-btn:hover{background:var(--hover)}
 .dist-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
 .date-row{display:flex;align-items:center;gap:5px;margin-top:5px}
@@ -86,10 +89,10 @@ body.tv-mode .action-btn.secondary.active{background:var(--tv-accent);color:#fff
 .results-area{flex:1;overflow-y:auto}
 .results-header{font-size:.75rem;font-weight:600;color:var(--text-light);padding:7px 1rem 4px;border-bottom:1px solid var(--border-light);position:sticky;top:0;background:var(--card);z-index:1}
 .results-list{padding:0}
-.result-item{padding:7px 1rem;border-bottom:1px solid var(--border-light);cursor:pointer;transition:background .1s}
+.result-item{padding:9px 1rem;border-bottom:1px solid var(--border-light);cursor:pointer;transition:background .1s}
 .result-item:hover{background:var(--hover)}
-.result-name{font-weight:600;font-size:.84rem;line-height:1.3}
-.result-meta{font-size:.7rem;color:var(--text-light);margin-top:1px;line-height:1.4}
+.result-name{font-weight:600;font-size:.88rem;line-height:1.35}
+.result-meta{font-size:.74rem;color:var(--text-light);margin-top:2px;line-height:1.4}
 .result-meta .lbl{font-weight:500}
 .welcome-msg{padding:1.5rem 1rem;text-align:center;color:var(--text-muted);font-size:.82rem;line-height:1.7}
 
@@ -272,8 +275,8 @@ body.tv-mode .cal-pill.saved::before{content:"\1F4FA "}
 .detail-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.35);z-index:1000;display:flex;align-items:center;justify-content:center;animation:fadeIn .15s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .detail-card{background:var(--card);border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.15);max-width:540px;width:92%;max-height:82vh;overflow-y:auto;padding:1.8rem;position:relative}
-.detail-close{position:absolute;top:10px;right:14px;font-size:1.5rem;background:none;border:none;cursor:pointer;color:var(--text-muted);line-height:1;padding:4px}
-.detail-close:hover{color:var(--text)}
+.detail-close{position:absolute;top:10px;right:14px;font-size:.85rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text);line-height:1;padding:6px 12px;font-family:inherit;font-weight:600}
+.detail-close:hover{background:var(--active)}
 .detail-name{font-size:1.15rem;font-weight:700;margin-bottom:.4rem;padding-right:2rem;line-height:1.3}
 .detail-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.8rem}
 .detail-tag{font-size:.68rem;padding:2px 8px;border:1px solid var(--border);border-radius:10px;color:var(--text-light)}
@@ -284,7 +287,7 @@ body.tv-mode .cal-pill.saved::before{content:"\1F4FA "}
 .detail-map{height:180px;border-radius:var(--radius);border:1px solid var(--border);margin-top:.8rem;overflow:hidden}
 .detail-map .leaflet-control-attribution{font-size:8px}
 .detail-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:.8rem}
-.detail-btn{font-family:inherit;font-size:.75rem;padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:background .15s}
+.detail-btn{font-family:inherit;font-size:.8rem;padding:8px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:background .15s}
 .detail-btn:hover{background:var(--hover)}
 .detail-btn.primary{background:var(--text);color:#fff;border-color:var(--text)}
 .detail-btn.primary:hover{opacity:.85}
@@ -320,8 +323,8 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
 .timeline-header-left{display:flex;align-items:center;gap:12px}
 .timeline-title{font-size:1.05rem;font-weight:700}
 .timeline-subtitle{font-size:.72rem;color:var(--text-light)}
-.timeline-close{font-size:1.4rem;background:none;border:none;cursor:pointer;color:var(--text-muted);padding:4px 8px;line-height:1}
-.timeline-close:hover{color:var(--text)}
+.timeline-close{font-size:1rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text);padding:6px 14px;line-height:1;font-family:inherit;font-weight:600}
+.timeline-close:hover{background:var(--active)}
 .timeline-body{flex:1;overflow-y:auto;padding:0 1.2rem 1.2rem}
 .timeline-summary{display:flex;gap:10px;padding:.8rem 0;border-bottom:1px solid var(--border-light);margin-bottom:.6rem;flex-wrap:wrap}
 .tl-stat{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--text-light);padding:4px 10px;background:var(--bg);border-radius:12px}
@@ -381,7 +384,8 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
 .drives-popup{background:var(--card);border-radius:10px;width:92%;max-width:700px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.2)}
 .drives-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;border-bottom:1px solid var(--border-light)}
 .drives-title{font-size:1.1rem;font-weight:800}
-.drives-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-muted);line-height:1}
+.drives-close{background:var(--bg);border:1px solid var(--border);border-radius:6px;font-size:1rem;cursor:pointer;color:var(--text);line-height:1;padding:6px 14px;font-family:inherit;font-weight:600}
+.drives-close:hover{background:var(--active)}
 .drives-filters{display:flex;gap:6px;padding:.6rem 1.2rem;flex-wrap:wrap;border-bottom:1px solid var(--border-light)}
 .drives-body{overflow-y:auto;padding:1rem 1.2rem;flex:1}
 .drive-card{border:1px solid var(--border-light);border-radius:8px;padding:.8rem 1rem;margin-bottom:.8rem;transition:box-shadow .15s;display:flex;gap:12px}
@@ -419,10 +423,11 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
 
 <header class="topbar">
   <div class="topbar-left">
+    <button class="home-btn" id="homeBtn" title="Go back to the home screen and reset everything">&#8962;</button>
     <div class="greeting" id="greeting"></div>
     <div class="mode-toggle">
-      <button class="mode-btn active-local" id="modeLocal" onclick="switchMode('local')">Things To Do</button>
-      <button class="mode-btn" id="modeTV" onclick="switchMode('tv')">TV Guide</button>
+      <button class="mode-btn active-local" id="modeLocal" onclick="switchMode('local')" title="Events, restaurants, and activities in Green Bay">Things To Do</button>
+      <button class="mode-btn" id="modeTV" onclick="switchMode('tv')" title="Browse your YouTube TV schedule">TV Guide</button>
     </div>
   </div>
   <input type="text" id="searchBox" class="search-box" placeholder="Search events, restaurants, places...">
@@ -438,10 +443,10 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
   <!-- LOCAL MODE LEFT PANEL -->
   <aside class="left-panel" id="leftPanel">
     <div class="left-controls" id="leftControls">
-      <button class="action-btn" id="todayEventsBtn">What's going on today?</button>
-      <button class="action-btn" id="thisWeekBtn">What's going on this week?</button>
-      <button class="action-btn" id="driveBtn" style="background:#5a6e5a;border-color:#5a6e5a">&#128663; Let's go for a drive</button>
-      <button class="action-btn secondary" id="planBtn">Plan Something</button>
+      <button class="action-btn" id="todayEventsBtn" title="See everything happening in Green Bay today">What's going on today?</button>
+      <button class="action-btn" id="thisWeekBtn" title="Browse events for each day this week">What's going on this week?</button>
+      <button class="action-btn" id="driveBtn" style="background:#5a6e5a;border-color:#5a6e5a" title="Explore scenic drives and road trips near Green Bay">&#128663; Let's go for a drive</button>
+      <button class="action-btn secondary" id="planBtn" title="Build an itinerary by picking events across multiple days">Plan Something</button>
       <div class="ctrl-row">
         <span class="ctrl-label">Distance:</span>
         <button class="dist-btn" data-dist="10">10 mi</button>
@@ -457,7 +462,7 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
         <button class="sm-btn" id="clearDatesBtn" style="display:none">clear</button>
       </div>
       <div class="saved-row">
-        <button class="action-btn secondary" id="savedBtn">My Saved Events</button>
+        <button class="action-btn secondary" id="savedBtn" title="Show only the events you've starred and saved">My Saved Events</button>
       </div>
       <div class="reset-row" id="resetRow" style="display:none">
         <button class="reset-link" id="resetAllBtn">Reset all filters</button>
@@ -503,7 +508,7 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
   <!-- TV MODE LEFT PANEL (hidden by default) -->
   <aside class="left-panel" id="tvLeftPanel" style="display:none">
     <div class="left-controls" id="tvLeftControls">
-      <button class="action-btn" id="tvTonightBtn">What's on tonight?</button>
+      <button class="action-btn" id="tvTonightBtn" title="Filter TV shows airing tonight (7 PM and later)">What's on tonight?</button>
       <button class="action-btn" id="tvThisWeekBtn">This week's highlights</button>
       <div class="ctrl-row" style="margin-top:8px">
         <span class="ctrl-label">Genre:</span>
@@ -514,7 +519,7 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
       </div>
       <div class="ctrl-row" id="tvNetworkRow"></div>
       <div class="saved-row" style="margin-top:8px">
-        <button class="action-btn secondary" id="tvSavedBtn">My TV Calendar</button>
+        <button class="action-btn secondary" id="tvSavedBtn" title="Show only the TV shows you've saved">My TV Calendar</button>
       </div>
       <div class="reset-row" id="tvResetRow" style="display:none">
         <button class="reset-link" id="tvResetAllBtn">Reset all filters</button>
@@ -548,7 +553,7 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
 
 <div class="detail-overlay" id="detailOverlay" style="display:none">
   <div class="detail-card">
-    <button class="detail-close" id="detailClose">&times;</button>
+    <button class="detail-close" id="detailClose">&larr; Close</button>
     <div id="detailContent"></div>
   </div>
 </div>
@@ -579,7 +584,7 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
         <div class="timeline-title" id="timelineTitle"></div>
         <div class="timeline-subtitle" id="timelineSubtitle"></div>
       </div>
-      <button class="timeline-close" id="timelineClose">&times;</button>
+      <button class="timeline-close" id="timelineClose">&larr; Close</button>
     </div>
     <div class="timeline-body" id="timelineBody"></div>
   </div>
@@ -592,7 +597,7 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
         <div class="timeline-title" id="planOverlayTitle">Plan Something</div>
         <div class="timeline-subtitle" id="planOverlaySubtitle">Pick dates and build your itinerary</div>
       </div>
-      <button class="timeline-close" id="planOverlayClose">&times;</button>
+      <button class="timeline-close" id="planOverlayClose">&larr; Close</button>
     </div>
     <div class="timeline-body" id="planOverlayBody"></div>
   </div>
@@ -602,7 +607,7 @@ body.tv-mode .detail-btn.primary{background:var(--tv-accent);border-color:var(--
   <div class="drives-popup">
     <div class="drives-header">
       <div class="drives-title">&#128663; Scenic Drives near Green Bay</div>
-      <button class="drives-close" id="drivesClose">&times;</button>
+      <button class="drives-close" id="drivesClose">&larr; Close</button>
     </div>
     <div class="drives-filters" id="drivesFilters"></div>
     <div class="drives-body" id="drivesBody"></div>
@@ -3775,8 +3780,8 @@ let savedPlans = JSON.parse(localStorage.getItem("gbexplorer_plans") || "[]");
 let savedShows = JSON.parse(localStorage.getItem("gbexplorer_tv") || "[]");
 let hiddenItems = new Set(JSON.parse(localStorage.getItem("gbexplorer_hidden") || "[]"));
 function isHidden(id) { return hiddenItems.has(id); }
-function hideItem(id) { hiddenItems.add(id); localStorage.setItem("gbexplorer_hidden", JSON.stringify([...hiddenItems])); applyAll(); }
-function hideTV(epId) { hiddenItems.add("tv_" + epId); localStorage.setItem("gbexplorer_hidden", JSON.stringify([...hiddenItems])); if (appMode === "tv") { renderCalendar(); renderTVResults(); updateTVUI(); } }
+function hideItem(id) { const item = DATA.find(d => d.id === id); if (item && !confirm("Hide \"" + item.name + "\" from all results?")) return; hiddenItems.add(id); localStorage.setItem("gbexplorer_hidden", JSON.stringify([...hiddenItems])); applyAll(); }
+function hideTV(epId) { if (!confirm("Hide this show from results?")) return; hiddenItems.add("tv_" + epId); localStorage.setItem("gbexplorer_hidden", JSON.stringify([...hiddenItems])); if (appMode === "tv") { renderCalendar(); renderTVResults(); updateTVUI(); } }
 function unhideAll() { hiddenItems.clear(); localStorage.setItem("gbexplorer_hidden", "[]"); if (appMode === "tv") { renderCalendar(); renderTVResults(); updateTVUI(); } else applyAll(); }
 let planningMode = false;
 let planTodFilters = [];
@@ -4665,6 +4670,7 @@ function buildDetailHTML(item, dateCtx) {
   if (item.url) html += '<a class="detail-btn" href="' + esc(item.url) + '" target="_blank">Website</a>';
   html += '<a class="detail-btn" href="' + mapsUrl + '" target="_blank">Directions</a>';
   html += '</div></div>';
+  html += '<div style="margin-top:16px;text-align:center"><button class="detail-btn" onclick="document.getElementById(\'detailOverlay\').style.display=\'none\'" style="width:100%;justify-content:center;font-weight:600;padding:10px">\u2190 Close</button></div>';
   return html;
 }
 
@@ -4741,6 +4747,7 @@ function buildTVDetailHTML(ep) {
   html += '<a class="detail-btn" href="https://www.youtube.com/results?search_query=' + searchQ + '+trailer" target="_blank">YouTube Trailers</a>';
   if (show.name) html += '<a class="detail-btn" href="https://www.google.com/search?q=' + encodeURIComponent(show.name + " where to stream") + '" target="_blank">Where to Stream</a>';
   html += '</div>';
+  html += '<div style="margin-top:16px;text-align:center"><button class="detail-btn" onclick="document.getElementById(\'detailOverlay\').style.display=\'none\'" style="width:100%;justify-content:center;font-weight:600;padding:10px">\u2190 Close</button></div>';
   return html;
 }
 
@@ -5390,7 +5397,7 @@ function renderDrivesList() {
   if (driveFavsOnly) drives = SCENIC_DRIVES.filter(d => isDriveSaved(d.name)).sort((a,b) => a.distFromHome - b.distFromHome);
   if (!drives.length) { body.innerHTML = '<div class="welcome-msg">' + (driveFavsOnly ? 'No favorite drives yet. Star some drives to save them here!' : 'No drives found within ' + driveDistFilter + ' miles. Try increasing the distance.') + '</div>'; return; }
   const mapsUrl = (d) => "https://www.google.com/maps/dir/Green+Bay,+WI/" + d.lat + "," + d.lon;
-  const embedUrl = (d) => "https://maps.google.com/maps?q=" + d.lat + "," + d.lon + "&z=9&output=embed";
+  const embedUrl = (d) => "https://maps.google.com/maps?saddr=Green+Bay,+WI&daddr=" + d.lat + "," + d.lon + "&output=embed";
   body.innerHTML = drives.map((d, i) => {
     const fav = isDriveSaved(d.name);
     return '<div class="drive-card">' +
@@ -5412,6 +5419,37 @@ function renderDrivesList() {
 document.getElementById("driveBtn").addEventListener("click", openDrives);
 document.getElementById("drivesClose").addEventListener("click", closeDrives);
 document.getElementById("drivesOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) closeDrives(); });
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    if (document.getElementById("drivesOverlay").style.display === "flex") { closeDrives(); return; }
+    if (document.getElementById("planOverlay").style.display === "flex") { closePlanOverlay(); return; }
+    if (document.getElementById("timelineOverlay").style.display === "flex") { closeTimeline(); return; }
+    if (document.getElementById("detailOverlay").style.display === "flex") { document.getElementById("detailOverlay").style.display = "none"; return; }
+    if (document.getElementById("dayOverlay").style.display === "flex") { document.getElementById("dayOverlay").style.display = "none"; return; }
+  }
+});
+
+// ===== HOME =====
+document.getElementById("homeBtn").addEventListener("click", () => {
+  closeTimeline();
+  closePlanOverlay();
+  closeDrives();
+  document.getElementById("detailOverlay").style.display = "none";
+  document.getElementById("dayOverlay").style.display = "none";
+  if (appMode !== "local") switchMode("local");
+  currentCat = ""; distFilter = 0; selectedDay = null; thisWeekActive = false; savedOnlyActive = false;
+  document.getElementById("searchBox").value = "";
+  document.getElementById("dateFrom").value = "";
+  document.getElementById("dateTo").value = "";
+  expandedWeekDay = null; expandedMonthDay = null;
+  calView = "week"; calYear = new Date().getFullYear(); calMonth = new Date().getMonth();
+  const d = new Date(); d.setDate(d.getDate() - d.getDay()); calWeekStart = d.toISOString().slice(0,10);
+  document.querySelectorAll(".cal-view-btn").forEach(b => b.classList.toggle("active", b.dataset.view === "week"));
+  buildCatFilters(); applyAll();
+  window.scrollTo(0, 0);
+});
 
 // ===== INIT =====
 updateGreeting();

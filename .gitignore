@@ -1,0 +1,5 @@
+# ShawnderPlanner (ephemeral -- don't track)
+data/
+.shawnder/
+.cursor/
+.commitmsg.tmp

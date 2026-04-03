@@ -4214,10 +4214,18 @@ function buildWeatherRec() {
   banner.innerHTML = msg + ' <span style="font-size:.6rem;opacity:.7">Click to browse \u2192</span>';
   banner.style.display = "block";
   banner.onclick = function() {
-    const items = DATA.filter(d => !isHidden(d.id) && d.setting === filterSetting && (distFilter <= 0 || getDistMiles(d) <= distFilter));
+    const td = todayStr();
+    const todaySet = new Set((EVENT_MAP[td] || []).map(i => i.id));
+    const items = DATA.filter(d => {
+      if (isHidden(d.id)) return false;
+      if (d.setting !== filterSetting) return false;
+      if (distFilter > 0 && getDistMiles(d) > distFilter) return false;
+      if (!d.date) return true;
+      return todaySet.has(d.id);
+    });
     items.sort((a, b) => a.name.localeCompare(b.name));
-    const title = filterSetting === "indoor" ? "Indoor Activities (" + items.length + ")" : "Outdoor Activities (" + items.length + ")";
-    showQuickPopup(title, items);
+    const label = filterSetting === "indoor" ? "Indoor Activities for Today" : "Outdoor Activities for Today";
+    showQuickPopup(label + " (" + items.length + ")", items);
   };
 }
 

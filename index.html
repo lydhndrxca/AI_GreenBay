@@ -524,6 +524,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       <button class="action-btn" id="driveBtn" style="background:#5a6e5a;border-color:#5a6e5a" title="Explore scenic drives and road trips near Green Bay">&#128663; Let's go for a drive</button>
       <button class="action-btn" id="eatBtn" style="background:#8b5e3c;border-color:#8b5e3c" title="Find the perfect restaurant based on your preferences">&#127860; Where should we eat?</button>
       <button class="action-btn" id="historyBtn" style="background:#6b5b4f;border-color:#6b5b4f" title="Explore the rich history of Green Bay and surrounding areas">&#127963; Explore local history</button>
+      <button class="action-btn" id="golfBtn" style="background:#2e7d32;border-color:#2e7d32" title="Find golf courses, driving ranges, and backyard practice tips">&#9971; Where to golf?</button>
       <div class="wx-rec-banner" id="wxRecBanner" style="display:none"></div>
       <div class="quick-filter-row">
         <button class="qf-btn" id="freeBtn" title="Show only free things to do">&#127381; Free stuff</button>
@@ -4450,19 +4451,20 @@ SCENIC_DRIVES.forEach(d => { d.distFromHome = Math.round(haversineMiles(HOME_COO
 
 // ===== WEATHER CACHE =====
 const _weatherCache = {};
-async function fetchWeather() {
-  if (_weatherCache.data) return _weatherCache.data;
+async function fetchWeather(forceRefresh) {
+  if (!forceRefresh && _weatherCache.data && _weatherCache.ts && (Date.now() - _weatherCache.ts < 3600000)) return _weatherCache.data;
   try {
     const resp = await fetch("https://api.open-meteo.com/v1/forecast?latitude=44.4822&longitude=-88.0707&daily=temperature_2m_max,temperature_2m_min,weather_code&temperature_unit=fahrenheit&timezone=America/Chicago&forecast_days=16");
-    if (!resp.ok) return null;
+    if (!resp.ok) return _weatherCache.data || null;
     const json = await resp.json();
     const wx = {};
     (json.daily.time || []).forEach((d, i) => {
       wx[d] = { hi: Math.round(json.daily.temperature_2m_max[i]), lo: Math.round(json.daily.temperature_2m_min[i]), code: json.daily.weather_code[i] };
     });
     _weatherCache.data = wx;
+    _weatherCache.ts = Date.now();
     return wx;
-  } catch(e) { return null; }
+  } catch(e) { return _weatherCache.data || null; }
 }
 function wxIcon(code) {
   if (code === 0) return "\u2600\uFE0F";
@@ -4588,6 +4590,34 @@ let dayPopupSelectedIdx = 0;
 let expandedWeekDay = new Date().toISOString().slice(0,10);
 let expandedMonthDay = null;
 
+// ===== USER DATA PROTECTION — runs on every load =====
+// ID stability rule: NEVER change an existing item's id. Only add new IDs.
+// Removing an item is safe — orphan cleanup below handles it.
+(function cleanupOrphanedUserData() {
+  const validIds = new Set(DATA.map(d => d.id));
+  const validDriveNames = new Set(SCENIC_DRIVES.map(d => d.name));
+
+  const beforeSaved = savedEvents.length;
+  savedEvents = savedEvents.filter(e => validIds.has(e.id));
+  if (savedEvents.length !== beforeSaved) localStorage.setItem("gbexplorer_cal", JSON.stringify(savedEvents));
+
+  const beforeHidden = hiddenItems.size;
+  hiddenItems = new Set([...hiddenItems].filter(id => validIds.has(id)));
+  if (hiddenItems.size !== beforeHidden) localStorage.setItem("gbexplorer_hidden", JSON.stringify([...hiddenItems]));
+
+  const beforeEat = eatExcluded.size;
+  eatExcluded = new Set([...eatExcluded].filter(id => validIds.has(id)));
+  if (eatExcluded.size !== beforeEat) localStorage.setItem("gbexplorer_eat_excluded", JSON.stringify([...eatExcluded]));
+
+  const beforeHidDrives = hiddenDrives.size;
+  hiddenDrives = new Set([...hiddenDrives].filter(n => validDriveNames.has(n)));
+  if (hiddenDrives.size !== beforeHidDrives) localStorage.setItem("gbexplorer_hidden_drives", JSON.stringify([...hiddenDrives]));
+
+  const beforeDoneDrives = doneDrives.size;
+  doneDrives = new Set([...doneDrives].filter(n => validDriveNames.has(n)));
+  if (doneDrives.size !== beforeDoneDrives) localStorage.setItem("gbexplorer_done_drives", JSON.stringify([...doneDrives]));
+})();
+
 // ===== HELPERS =====
 function esc(s) { if (!s) return ""; const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 function todayStr() { return new Date().toISOString().slice(0, 10); }
@@ -4612,6 +4642,7 @@ const MUSIC_SUBS = new Set(["Concert","Live Music","Music","Music Venue","Musica
 function getDisplayCat(item) {
   if (item.cat === "Restaurant") return "Food";
   if (MUSIC_SUBS.has(item.sub)) return "Music";
+  if (item.sub && item.sub.toLowerCase().startsWith("golf")) return "Golf";
   return item.cat;
 }
 function getSubGroup(rawSub) {
@@ -4652,7 +4683,7 @@ const DISPLAY_CATS = (function() {
   const s = new Set();
   DATA.forEach(d => s.add(getDisplayCat(d)));
   return [...s].sort((a,b) => {
-    const order = ["Food","Music"];
+    const order = ["Food","Music","Golf"];
     const ai = order.indexOf(a), bi = order.indexOf(b);
     if (ai !== -1 && bi !== -1) return ai - bi;
     if (ai !== -1) return -1;
@@ -5866,6 +5897,7 @@ function renderHistoryDetail() {
 }
 
 document.getElementById("historyBtn").addEventListener("click", openHistoryOverlay);
+document.getElementById("golfBtn").addEventListener("click", function() { openCatPopup("Golf"); });
 document.getElementById("histClose").addEventListener("click", closeHistoryOverlay);
 document.getElementById("historyOverlay").addEventListener("click", function(e) { if (e.target === this) closeHistoryOverlay(); });
 document.getElementById("histSearch").addEventListener("input", debounce(function() { _histSearch = this.value.trim(); _histSelectedIdx = 0; renderHistoryOverlay(); }, 200));
@@ -6096,6 +6128,7 @@ buildCatFilters();
 applyAll();
 
 fetchWeather().then(() => { renderCalendar(); buildWeatherRec(); });
+setInterval(() => { fetchWeather(true).then(() => { renderCalendar(); buildWeatherRec(); }); }, 3600000);
 </script>
 </body>
 </html>

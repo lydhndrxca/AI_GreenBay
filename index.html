@@ -5787,28 +5787,80 @@ document.getElementById("supperClubBtn").addEventListener("click", function() {
 });
 
 // ===== TICKER =====
+function _tickerShuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
 function buildTicker() {
   const track = document.getElementById("tickerTrack");
   const today = todayStr(); const items = [];
+
+  // 1) FREE & CHEAP EVENTS this week (prioritized)
+  const freeEvts = []; const cheapEvts = [];
   for (let i = 0; i < 7; i++) {
     const ds = addDays(today,i);
-    const evts = (EVENT_MAP[ds]||[]).filter(item => !isHidden(item.id) && (distFilter <= 0 || getDistMiles(item) <= distFilter));
-    const dl = i === 0 ? "Today" : i === 1 ? "Tomorrow" : new Date(ds+"T12:00:00").toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric"});
-    evts.slice(0,5).forEach(item => {
-      const timeStr = item.dateLabel ? item.dateLabel.replace(/^[A-Z][a-z]{2} [A-Z][a-z]{2} \d+,?\s*/,"") : "";
-      const venue = item.venue || "";
-      const cat = getDisplayCat(item);
-      let detail = esc(item.name);
-      if (venue) detail += ' <span class="ticker-venue">@ ' + esc(venue) + '</span>';
-      if (cat) detail += ' <span class="ticker-venue">\u00B7 ' + esc(cat) + '</span>';
-      if (item.free) detail += ' <span class="ticker-venue">\u00B7 Free</span>';
-      else if (item.price) detail += ' <span class="ticker-venue">\u00B7 ' + esc(item.price) + '</span>';
-      items.push('<span class="ticker-item"><span class="ticker-date">' + dl + ':</span> <a href="javascript:void(0)" onclick="openDetailForDate(' + item.id + ',\'' + ds + '\')">' + detail + '</a></span>');
+    const evts = (EVENT_MAP[ds]||[]).filter(d => !isHidden(d.id) && (distFilter <= 0 || getDistMiles(d) <= distFilter));
+    const dl = i === 0 ? "Today" : i === 1 ? "Tomorrow" : new Date(ds+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
+    evts.forEach(item => {
+      const obj = {item, ds, dl};
+      if (item.free) freeEvts.push(obj); else if (item.priceNum <= 1) cheapEvts.push(obj);
     });
   }
+  _tickerShuffle(freeEvts); _tickerShuffle(cheapEvts);
+  const weekEvts = freeEvts.slice(0,8).concat(cheapEvts.slice(0,4));
+  weekEvts.forEach(({item,ds,dl}) => {
+    let detail = esc(item.name);
+    if (item.venue) detail += ' <span class="ticker-venue">@ ' + esc(item.venue) + '</span>';
+    if (item.free) detail += ' <span class="ticker-venue">\u00B7 FREE</span>';
+    else if (item.price) detail += ' <span class="ticker-venue">\u00B7 ' + esc(item.price) + '</span>';
+    items.push('<span class="ticker-item"><span class="ticker-date">' + dl + ':</span> <a href="javascript:void(0)" onclick="openDetailForDate(' + item.id + ',\'' + ds + '\')">' + detail + '</a></span>');
+  });
+
+  // 2) FOOD SPOTS — cheap eats, holes in the wall, local gems
+  const foodPool = DATA.filter(d => d.cat === "Restaurant" && !isHidden(d.id) && d.priceNum <= 2 && (distFilter <= 0 || getDistMiles(d) <= distFilter));
+  const foodPicks = _tickerShuffle(foodPool.slice()).slice(0,5);
+  const foodLabels = ["\uD83C\uDF7D\uFE0F Try this", "\uD83C\uDF54 Eat local", "\uD83E\uDD62 Hidden gem", "\uD83C\uDF55 Grab a bite", "\uD83E\uDD69 Local flavor"];
+  foodPicks.forEach((item,i) => {
+    let detail = esc(item.name);
+    if (item.cuisine) detail += ' <span class="ticker-venue">\u00B7 ' + esc(item.cuisine) + '</span>';
+    else if (item.sub) detail += ' <span class="ticker-venue">\u00B7 ' + esc(item.sub) + '</span>';
+    if (item.venue) detail += ' <span class="ticker-venue">@ ' + esc(item.venue) + '</span>';
+    if (item.free) detail += ' <span class="ticker-venue">\u00B7 FREE</span>';
+    else if (item.price) detail += ' <span class="ticker-venue">\u00B7 ' + esc(item.price) + '</span>';
+    items.push('<span class="ticker-item"><span class="ticker-date">' + foodLabels[i % foodLabels.length] + ':</span> <a href="javascript:void(0)" onclick="openDetail(' + item.id + ')">' + detail + '</a></span>');
+  });
+
+  // 3) SCENIC DRIVES — random picks
+  if (typeof SCENIC_DRIVES !== "undefined" && SCENIC_DRIVES.length) {
+    const drivePool = SCENIC_DRIVES.filter(d => !hiddenDrives.has(d.name) && !doneDrives.has(d.name));
+    const drivePicks = _tickerShuffle(drivePool.slice()).slice(0,2);
+    drivePicks.forEach(d => {
+      const mi = d.miles ? d.miles + ' mi' : '';
+      const time = d.time || '';
+      let meta = [mi, time].filter(Boolean).join(', ');
+      if (meta) meta = ' <span class="ticker-venue">\u00B7 ' + esc(meta) + '</span>';
+      items.push('<span class="ticker-item"><span class="ticker-date">\uD83D\uDE97 Drive:</span> <a href="javascript:void(0)" onclick="openDrives()">' + esc(d.name) + meta + '</a></span>');
+    });
+  }
+
+  // 4) HIDDEN GEMS & FUN SPOTS — undated activities, attractions, quirky places
+  const gemCats = new Set(["Activity","Attraction","Park"]);
+  const gemPool = DATA.filter(d => gemCats.has(d.cat) && !d.date && !isHidden(d.id) && (distFilter <= 0 || getDistMiles(d) <= distFilter));
+  const gemPicks = _tickerShuffle(gemPool.slice()).slice(0,4);
+  const gemLabels = ["\u2728 Explore", "\uD83D\uDDFA\uFE0F Discover", "\uD83C\uDF1F Check out", "\uD83D\uDCA1 Did you know?"];
+  gemPicks.forEach((item,i) => {
+    let detail = esc(item.name);
+    if (item.neighborhood) detail += ' <span class="ticker-venue">\u00B7 ' + esc(item.neighborhood) + '</span>';
+    if (item.free) detail += ' <span class="ticker-venue">\u00B7 FREE</span>';
+    else if (item.price) detail += ' <span class="ticker-venue">\u00B7 ' + esc(item.price) + '</span>';
+    items.push('<span class="ticker-item"><span class="ticker-date">' + gemLabels[i % gemLabels.length] + ':</span> <a href="javascript:void(0)" onclick="openDetail(' + item.id + ')">' + detail + '</a></span>');
+  });
+
+  // 5) ON THIS DAY
   const md = String(new Date().getMonth()+1).padStart(2,"0")+"-"+String(new Date().getDate()).padStart(2,"0");
   if (ON_THIS_DAY[md]) items.push('<span class="ticker-item"><span class="ticker-hist">On this day: '+esc(ON_THIS_DAY[md])+'</span></span>');
+
   if (!items.length) items.push('<span class="ticker-item">Welcome to Green Bay Explorer!</span>');
+
+  // Shuffle the final mix so categories interleave naturally
+  _tickerShuffle(items);
   const c = items.join(""); track.innerHTML = c + c;
 }
 
@@ -5985,6 +6037,7 @@ DATA.forEach(d => {
 // ===== INIT =====
 updateGreeting();
 buildTicker();
+setInterval(buildTicker, 300000);
 buildCatFilters();
 applyAll();
 
